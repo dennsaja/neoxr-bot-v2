@@ -3,7 +3,8 @@ exports.run = {
       client,
       body,
       groupSet,
-      isAdmin
+      isAdmin,
+      Func
    }) => {
       try {
         if (groupSet.antilink && !isAdmin && body) {
