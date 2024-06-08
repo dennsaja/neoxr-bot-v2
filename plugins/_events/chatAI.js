@@ -8,7 +8,6 @@ exports.run = {
        setting
    }) => {
        try {
-           if (!m.isGroup) {
                if (body && global.evaluate_chars.some(v => body.startsWith(v)) || body && Func.socmed(body)) return
                global.db.chatroom = global.db.chatroom ? global.db.chatroom : []
                const room = global.db.chatroom.find(v => v.jid == m.sender)
@@ -30,7 +29,7 @@ exports.run = {
                }]
                const header_text = 'Gemini Pro'
 
-               if (body && hint.includes(body.toLowerCase())) {
+               if (body && !m.isGroup && hint.includes(body.toLowerCase())) {
                    if (room) { // Periksa apakah pengguna sudah berada dalam ruang obrolan
                        client.reply(m.chat, 'Halo! Apa yang bisa saya bantu hari ini?')
                    } else {
@@ -104,7 +103,6 @@ exports.run = {
                        }
                    })
                }
-           }
        } catch (e) {
            console.log(e)
            client.reply(m.chat, Func.jsonFormat(e), m)
