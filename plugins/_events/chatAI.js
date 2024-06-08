@@ -29,7 +29,7 @@ exports.run = {
                }]
                const header_text = 'Gemini Pro'
 
-               if (body && !m.isGroup && hint.includes(body.toLowerCase())) {
+               if (body && hint.includes(body.toLowerCase())) {
                    if (room) { // Periksa apakah pengguna sudah berada dalam ruang obrolan
                        client.reply(m.chat, 'Halo! Apa yang bisa saya bantu hari ini?')
                    } else {
