@@ -7,16 +7,29 @@ exports.run = {
       Func
    }) => {
       try {
+         // delete link then kick when antilink is turned on
          if (groupSet.antilink && !isAdmin && body) {
-            if (body.match(/(chat.whatsapp.com)/gi) && !body.includes(await client.groupInviteCode(m.chat))) return client.sendMessage(m.chat, {            
-            delete: {            
-             remoteJid: m.chat,
-             fromMe: false,
-             id: m.key.id,
-             participant: m.sender
+            if (body.match(/(chat.whatsapp.com)/gi) && !body.includes(await client.groupInviteCode(m.chat)) || body.match(/(wa.me)/gi)) return client.sendMessage(m.chat, {
+               delete: {
+                  remoteJid: m.chat,
+                  fromMe: false,
+                  id: m.key.id,
+                  participant: m.sender
                }
-             })
+            })
          }
+         
+         // it only removes the link when antilink turned off
+         if (!groupSet.antilink && !isAdmin && body) {
+            if (body.match(/(chat.whatsapp.com)/gi) && !body.includes(await client.groupInviteCode(m.chat)) || body.match(/(wa.me)/gi)) return client.sendMessage(m.chat, {
+               delete: {
+                  remoteJid: m.chat,
+                  fromMe: false,
+                  id: m.key.id,
+                  participant: m.sender
+               }
+            })
+         }      
       } catch (e) {
          return client.reply(m.chat, Func.jsonFormat(e), m)
       }
