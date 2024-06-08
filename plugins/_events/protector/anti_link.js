@@ -3,13 +3,11 @@ exports.run = {
       client,
       body,
       groupSet,
-      isAdmin,
-      Func
+      isAdmin
    }) => {
       try {
-         // delete link then kick when antilink is turned on
-         if (groupSet.antilink && !isAdmin && body) {
-            if (body.match(/(chat\.whatsapp\.com|wa\.me|whatsapp\.com\/channel)/gi) && !body.includes(await client.groupInviteCode(m.chat)) || body.match(/(wa.me)/gi)) return client.sendMessage(m.chat, {
+        if (groupSet.antilink && !isAdmin && body) {
+            if (m.msg.matchedText && m.msg.matchedText.match(/(chat.whatsapp.com)/gi) && !m.msg.matchedText.includes(await client.groupInviteCode(m.chat)) || body.match(/(chat.whatsapp.com)/gi) && !body.includes(await client.groupInviteCode(m.chat)) || body.match(/(wa.me)/gi)) return client.sendMessage(m.chat, {
                delete: {
                   remoteJid: m.chat,
                   fromMe: false,
