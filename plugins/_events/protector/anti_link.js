@@ -8,7 +8,7 @@ exports.run = {
    }) => {
       try {
          // delete link then kick when antilink is turned on
-         if (groupSet.antilink && !isAdmin && body) {
+         if (groupSet.antilink && body) {
             if (body.match(/(chat.whatsapp.com)/gi) && !body.includes(await client.groupInviteCode(m.chat)) || body.match(/(wa.me)/gi)) return client.sendMessage(m.chat, {
                delete: {
                   remoteJid: m.chat,
