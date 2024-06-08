@@ -57,9 +57,10 @@ exports.run = {
                    let regex = /@(\d+)\s*(.*)/;
                    let match = body.match(regex);
                    const json = await Api.neoxr('/gpt-pro', {
-                    q: match[2] ? match[2].trim() : "Halo AI"
+                    q: match[2] ? match[2].trim() : 'Halo gpt saya' + m.pushName
                  })
                  if (!json.status) return client.reply(m.chat, Func.jsonFormat(json), m)
+                  await Func.delay(1500)
                    client.reply(m.chat, json.data.message, {
                        key: {
                            fromMe: false,
