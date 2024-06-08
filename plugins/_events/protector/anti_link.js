@@ -7,8 +7,21 @@ exports.run = {
       Func
    }) => {
       try {
-        if (groupSet.antilink && !isAdmin && body) {
-            if (m.msg.matchedText && m.msg.matchedText.match(/(chat.whatsapp.com)/gi) && !m.msg.matchedText.includes(await client.groupInviteCode(m.chat)) || body.match(/(chat.whatsapp.com)/gi) && !body.includes(await client.groupInviteCode(m.chat)) || body.match(/(wa.me)/gi)) return client.sendMessage(m.chat, {
+         // delete link then kick when antilink is turned on
+         if (groupSet.antilink && !isAdmin && body) {
+            if (body.match(/(chat.whatsapp.com)/gi) && !body.includes(await client.groupInviteCode(m.chat)) || body.match(/(wa.me)/gi)) return client.sendMessage(m.chat, {
+               delete: {
+                  remoteJid: m.chat,
+                  fromMe: false,
+                  id: m.key.id,
+                  participant: m.sender
+               }
+            })
+         }
+         
+         // it only removes the link when antilink turned off
+         if (!groupSet.antilink && !isAdmin && body) {
+            if (body.match(/(chat.whatsapp.com)/gi) && !body.includes(await client.groupInviteCode(m.chat)) || body.match(/(wa.me)/gi)) return client.sendMessage(m.chat, {
                delete: {
                   remoteJid: m.chat,
                   fromMe: false,
