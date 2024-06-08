@@ -22,7 +22,7 @@ exports.run = {
                const buttons = [{
                    name: 'quick_reply',
                    buttonParamsJson: JSON.stringify({
-                       display_text: 'Ask Me Anything',
+                       display_text: 'Ingin bertanya',
                        id: `start-chat`
                    }),
                    index: 0
@@ -54,7 +54,13 @@ exports.run = {
 
                for (let jid of [...new Set([...(m.mentionedJid || [])])]) {
                    if (jid != client.decodeJid(client.user.id)) continue
-                   if (!m.fromMe) return client.sendIAMessage(m.chat, buttons, {
+                   let regex = /@(\d+)\s*(.*)/;
+                   let match = body.match(regex);
+                   const json = await Api.neoxr('/gpt-pro', {
+                    q: match[2]
+                 })
+                 if (!json.status) return client.reply(m.chat, Func.jsonFormat(json), m)
+                   client.reply(m.chat, json.data.message, {
                        key: {
                            fromMe: false,
                            participant: '6282221251804@s.whatsapp.net',
@@ -62,13 +68,9 @@ exports.run = {
                        },
                        message: {
                            "extendedTextMessage": {
-                               "text": 'Gemini Pro'
+                               "text": 'AI Plus+'
                            }
                        }
-                   }, {
-                       header: '',
-                       content: 'Halo! Saya adalah asisten AI.\nAda yang bisa saya bantu hari ini?',
-                       footer: ''
                    })
                }
 
