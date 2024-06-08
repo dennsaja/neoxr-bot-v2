@@ -8,7 +8,7 @@ exports.run = {
    }) => {
       try {
          // delete link then kick when antilink is turned on
-         if (groupSet.antilink && m.isGroup && body) {
+         if (groupSet.antilink && m.isGroup && body && !m.fromMe) {
             if (body.match(/(https?:\/\/)?(www\.)?(chat\.whatsapp\.com)(\/[^\s]*)?/gi) && !body.includes(await client.groupInviteCode(m.chat)) || body.match(/(wa.me)/gi)) return client.sendMessage(m.chat, {
                delete: {
                   remoteJid: m.chat,
