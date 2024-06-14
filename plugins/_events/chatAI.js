@@ -86,14 +86,12 @@ exports.run = {
                if (body && body.toLowerCase() == 'stop' && room) return m.reply('Baik, sekarang chat AI telah di stop untuk mu.\nUntuk menggunakanya kembali ketik *AI* dan kirim ke bot.').then(() => Func.removeItem(global.db.chatroom, room))
 
                if (body && !body.startsWith('ai') && !global.evaluate_chars.some(v => body.startsWith(v)) && room) {
-                   const { GoogleGenerativeAI } = require("@google/generative-ai");
-                   const apiKey = process.env.API_GEMINI || 'AIzaSyAA_CarfaNVziJXHhKOfBqmY2JHGwCdNAw';
-                   const genAI = new GoogleGenerativeAI(apiKey);
-                   const model = genAI.getGenerativeModel({ model: "gemini-pro"});
-                   const result = await model.generateContent(body);
-                   const response = await result.response;
-                   const text = response.text();
-                   if (!m.fromMe && room) return client.reply(m.chat, text, {
+                   const json = await Api.neoxr('/gpt-pro', {
+                    q: body
+                 })
+                 if (!json.status) return client.reply(m.chat, Func.jsonFormat(json), m)
+                  await Func.delay(1500)
+                   if (!m.fromMe && room) return client.reply(m.chat, json.data.message, {
                        key: {
                            fromMe: false,
                            participant: '6282221251804@s.whatsapp.net',
