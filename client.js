@@ -2,6 +2,7 @@
 process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0'
 process.on('uncaughtException', console.error)
 require('events').EventEmitter.defaultMaxListeners = 500
+const PORT = process.env.PORT || 7392
 const { Baileys, MongoDB, PostgreSQL, Scandir } = new(require('@neoxr/wb'))
 const Function = new (require('./lib/system/functions'))
 const Func = Function
@@ -11,7 +12,10 @@ const spinnies = new(require('spinnies'))(),
    colors = require('@colors/colors'),
    stable = require('json-stable-stringify'),
    env = require('./config.json'),
-   { platform } = require('os')
+   { platform } = require('os'),
+   express = require('express'),
+   app = express(),
+   http = require('http')
 const cache = new(require('node-cache'))({
    stdTTL: env.cooldown
 })
@@ -54,6 +58,28 @@ client.on('ready', async () => {
          process.send('reset')
       }
    }, 60 * 1000)
+
+   /* server web */
+   const runServer = async () => {
+      app.set('json spaces', 2)
+      app.get("/get-api", async (req, res) => {
+         const serverInfoo = {
+           bot: {
+            users: global.db.users.length,
+            hit: Func.formatNumber(Func.jumlahkanHitStat(global.db.statistic)),
+            msgr: Func.formatNumber(global.db.setting.messageReceive),
+            msgs: Func.formatNumber(global.db.setting.messageSent)
+           },
+         }
+           res.json(serverInfoo);
+         })
+   
+      app.get('/', (req, res) => res.send('Server Active!'))
+      const server = http.createServer(app)
+      server.listen(PORT, () => console.log('Connected to server --', PORT))
+   }
+
+   runServer()
 
    /* create temp directory if doesn't exists */
    if (!fs.existsSync('./temp')) fs.mkdirSync('./temp')
