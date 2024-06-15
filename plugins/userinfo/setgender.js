@@ -18,7 +18,6 @@ exports.run = {
           client.reply(m.chat, Func.jsonFormat(e), m)
        }
     },
-    owner: true,
     cache: true,
     location: __filename
  }
