@@ -88,37 +88,21 @@ client.on('ready', async () => {
    require('./lib/system/config')
    
    /* clear temp folder every 10 minutes */
-   setInterval(async () => {
-      try {
-         const tmpFiles = fs.readdirSync('./temp')
-         if (tmpFiles.length > 0) {
-            tmpFiles.filter(v => !v.endsWith('.file')).map(v => fs.unlinkSync('./temp/' + v))
-         }
-         
-         /* this source from @jarspay */
-         const TIME = 1000 * 60 * 5
-         const filename = []
-         const files = await fs.readdirSync('./session')
-         for (const file of files) {
-            if (file != 'creds.json') filename.push(path.join('./session', file))
-         }
-
-         await Promise.allSettled(filename.map(async (file) => {
-            const stat = await fs.statSync(file)
-            if (stat.isFile() && (Date.now() - stat.mtimeMs >= TIME)) {
-               if (platform() === 'win32') {
-                  let fileHandle
-                  try {
-                     fileHandle = await fs.openSync(file, 'r+')
-                  } catch (e) {} finally {
-                     await fileHandle.close()
-                  }
-               }
-               await fs.unlinkSync(file)
-            }
-         }))
-      } catch {}
-   }, 60 * 1000 * 10)
+setInterval(async () => {
+   try {
+       const tmpFiles = fs.readdirSync('./temp');
+       if (tmpFiles.length > 0) {
+           tmpFiles
+               .filter(file => !file.endsWith('.file')) // Filter out files that do not end with .file
+               .forEach(file => {
+                   fs.unlinkSync(path.join('./temp', file)); // Remove the file
+                   console.log(`Deleted temp file: ${file}`); // Log the deletion
+               });
+       }
+   } catch (err) {
+       console.error(`Failed to clean temp directory:`, err); // Log any errors
+   }
+}, 60 * 1000 * 10); // Run every 10 minutes
 
    /* save database send http-request every 30 seconds */
    setInterval(async () => {
