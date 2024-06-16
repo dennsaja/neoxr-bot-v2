@@ -1,6 +1,6 @@
 exports.run = {
    usage: ['transfer'],
-   hidden: ['tf'],
+   hidden: ['tf', 'transferpoint', 'tfpoint'],
    use: '@tag amount',
    category: 'user info',
    async: async (m, {
