@@ -1,5 +1,5 @@
 exports.run = {
-   usage: ['gift'],
+   usage: ['gift', 'tflimit'],
    use: 'amount',
    category: 'group',
    async: async (m, {
