@@ -40,6 +40,10 @@ module.exports = async (client, ctx) => {
          banned_times: users.ban_times,
          simple: false
       })
+      if (m.fromMe) global.db.setting.messageSent += 1
+      if (!m.fromMe) global.db.setting.messageReceive += 1
+      if (m.fromMe && /audio|video|sticker|image|document/.test(m.mtype)) global.db.setting.uploadSize += m.msg.fileLength.low
+      if (!m.fromMe && /audio|video|sticker|image|document/.test(m.mtype)) global.db.setting.receiveSize += m.msg.fileLength.low
       if (!setting.online) client.sendPresenceUpdate('unavailable', m.chat)
       if (setting.online) {
          client.sendPresenceUpdate('available', m.chat)

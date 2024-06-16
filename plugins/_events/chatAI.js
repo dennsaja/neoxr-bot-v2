@@ -22,12 +22,11 @@ exports.run = {
                const buttons = [{
                    name: 'quick_reply',
                    buttonParamsJson: JSON.stringify({
-                       display_text: 'Ingin bertanya',
+                       display_text: 'Tanya saya apapun',
                        id: `start-chat`
                    }),
                    index: 0
                }]
-               const header_text = 'Gemini Pro'
 
                if (body && hint.includes(body.toLowerCase())) {
                    if (room) { // Periksa apakah pengguna sudah berada dalam ruang obrolan
@@ -41,7 +40,7 @@ exports.run = {
                            },
                            message: {
                                "extendedTextMessage": {
-                                   "text": 'Gemini Pro'
+                                   "text": 'AI Plus+'
                                }
                            }
                        }, {
@@ -83,7 +82,7 @@ exports.run = {
                    }))
                } else if (body && body.toLowerCase() == 'start-chat' && room) return m.reply('Kamu sudah membuat chatroom, kirim perintah *stop* untuk menghapus sesi chatroom.')
 
-               if (body && body.toLowerCase() == 'stop' && room) return m.reply('Baik, sekarang chat AI telah di stop untuk mu.\nUntuk menggunakanya kembali ketik *AI* dan kirim ke bot.').then(() => Func.removeItem(global.db.chatroom, room))
+               if (body && body.toLowerCase() == 'stop' && room) return m.reply('Baik, sekarang chat AI telah di stop untuk mu.\nUntuk menggunakanya kembali ketik *gemita ai* dan kirim ke bot.').then(() => Func.removeItem(global.db.chatroom, room))
 
                if (body && !body.startsWith('ai') && !global.evaluate_chars.some(v => body.startsWith(v)) && room) {
                    const json = await Api.neoxr('/gpt-pro', {
@@ -99,7 +98,7 @@ exports.run = {
                        },
                        message: {
                            "extendedTextMessage": {
-                               "text": 'di tenagai oleh 𝗚𝗲𝗺𝗶𝗻𝗶 𝗣𝗿𝗼'
+                               "text": 'ketik *stop* untuk menghentikan sesi chat dengan ai.'
                            }
                        }
                    })
