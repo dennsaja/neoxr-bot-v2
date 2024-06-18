@@ -1,5 +1,5 @@
 exports.run = {
-   usage: ['me'],
+   usage: ['me', 'akun'],
    category: 'user info',
    async: async (m, {
       client,
@@ -36,7 +36,7 @@ exports.run = {
          //let now = new Date() * 1
         // let lastseen = (user.lastseen == 0) ? 'Never' : Func.toDate(now - user.lastseen)
        //  let usebot = (user.usebot == 0) ? 'Never' : Func.toDate(now - user.usebot)
-         let caption = `乂  *I N F O R M A S I*\n\n`
+         let caption = `乂  *I N F O R M A S I  A K U N*\n\n`
          caption += `	◦ *Username* : ${user.username ? user.username : '_perlu di set_'}\n`
          caption += `	◦ *Gender* : ${gender}\n`
          caption += `	◦ *Bio* : ${Func.censorBio(bios)}\n`
@@ -47,7 +47,7 @@ exports.run = {
          caption += `	◦ *Level* : ${Func.level(user.point, global.multiplier)[0]} (${Func.role(Func.level(user.point, global.multiplier)[0])})\n`
          caption += `	◦ *Hitstat* : ${Func.formatNumber(user.hit)}\n`
          caption += `	◦ *Warning* : ${((m.isGroup) ? (typeof global.db.groups.find(v => v.jid == m.chat).member[m.sender] != 'undefined' ? global.db.groups.find(v => v.jid == m.chat).member[m.sender].warning : 0) + ' / 5' : user.warning + ' / 5')}\n\n`
-         caption += `乂  *S T A T U S*\n\n`
+         caption += `乂  *S T A T U S  A K U N*\n\n`
          caption += `	◦ *Blocked* : ${(blocked ? '√' : '×')}\n`
          caption += `	◦ *Banned* : ${(new Date - user.banTemp < global.timer) ? Func.toTime(new Date(user.banTemp + global.timer) - new Date()) + ' (' + ((global.timer / 1000) / 60) + ' min)' : user.banned ? '√' : '×'}\n`
          caption += `	◦ *Use In Private* : ${(global.db.chats.map(v => v.jid).includes(m.sender) ? '√' : '×')}\n`
@@ -60,7 +60,7 @@ exports.run = {
          client.sendMessageModify(m.chat, caption, m, {
              largeThumb: true,
              title: `${Func.censorName2(m.pushName)} ${(user.verified ? ' Terverifikasi' : '')}`,
-             body: `${(user.premium ? '⭐ Akun Premium' : 'Akun Standar')}`,
+             body: `${(user.premium ? '₪ Akun Nitro' : 'Akun Standar')}`,
              thumbnail: pic
          })
       }

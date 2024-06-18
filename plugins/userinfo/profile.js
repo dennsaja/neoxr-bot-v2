@@ -1,5 +1,5 @@
 exports.run = {
-   usage: ['profile'],
+   usage: ['profile', 'cek-akun'],
    use: 'mention or reply',
    category: 'user info',
    async: async (m, {
@@ -33,10 +33,10 @@ exports.run = {
             let now = new Date() * 1
             let lastseen = (target.lastseen == 0) ? 'Never' : Func.lastSeen(now - target.lastseen)
             let usebot = (target.usebot == 0) ? 'Never' : Func.toDate(now - target.usebot)
-            let caption = `乂  *U S E R - P R O F I L E*\n\n`
-            caption += `	◦  *Name* : ${Func.censorName(target.name)}\n`
+            let caption = `乂  *I N F O R M A S I  A K U N*\n\n`
+            caption += `	◦  *Username* : ${user.username ? user.username : '_perlu di set_'}\n`
+            caption += `	◦  *Gender* : ${gender}\n`
             caption += `	◦  *Terakhir Dilihat* : ${lastseen}\n`
-            caption += `	◦  *Username* : ${target.username ? target.username : '_perlu di set_'}\n`
             caption += `	◦  *Bio* : ${target.bio ? target.bio : '_perlu di set_'}\n`
             caption += `	◦  *Point* : ${Func.h2k(target.point)}\n`
             caption += `	◦  *Tabungan* : ${Func.h2k(target.tabungan)}\n`
@@ -45,7 +45,7 @@ exports.run = {
             caption += `	◦  *Hitstat* : ${Func.formatNumber(target.hit)}\n`
             caption += `	◦  *Level* : ${Func.level(user.point, env.multiplier)[0]} (${Func.role(Func.level(user.point, env.multiplier)[0])})\n`
             caption += `	◦  *Warning* : ${((m.isGroup) ? (typeof global.db.groups.find(v => v.jid == m.chat).member[user] != 'undefined' ? global.db.groups.find(v => v.jid == m.chat).member[user].warning : 0) + ' / 5' : target.warning + ' / 5')}\n\n`
-            caption += `乂  *U S E R - S T A T U S*\n\n`
+            caption += `乂  *S T A T U S  A K U N*\n\n`
             caption += `	◦  *Blocked* : ${(blocked ? '√' : '×')}\n`
             caption += `	◦  *Banned* : ${(new Date - target.ban_temporary < env.timer) ? Func.toTime(new Date(target.ban_temporary + env.timeout) - new Date()) + ' (' + ((env.timeout / 1000) / 60) + ' min)' : target.banned ? '√' : '×'}\n`
             caption += `	◦  *Use In Private* : ${(global.db.chats.map(v => v.jid).includes(user) ? '√' : '×')}\n`
@@ -57,6 +57,8 @@ exports.run = {
             caption += global.footer
             client.sendMessageModify(m.chat, caption, m, {
                largeThumb: true,
+               title: `${Func.censorName2(m.pushName)} ${(user.verified ? 'Terverifikasi' : '')}`,
+               body: `${(user.premium ? '₪ Akun Nitro' : 'Akun Standar')}`,
                thumbnail: pic
             })
          }

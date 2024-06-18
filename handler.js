@@ -151,6 +151,13 @@ module.exports = async (client, ctx) => {
                client.reply(m.chat, global.status.owner, m)
                continue
             }
+            if (users.banned) {
+               client.sendIAMessage(m.chat, [{
+                  "name": "cta_url",
+                  "buttonParamsJson": "{\"display_text\":\"Isi Formulir\",\"url\":\"https://forms.gle/ftWkwbbx5etdVZWL9\",\"merchant_url\":\"https://forms.gle/ftWkwbbx5etdVZWL9\"}"
+               }], m, { header: 'Akun Kamu Dibanned', content: 'Opps akun kamu di banned, silahkan aju banding untuk membuka kembali akun mu.\n\nSilahkan isi form nya disini:.'})
+               continue
+            }
             if (cmd.restrict && !isPrem && !isOwner && text && new RegExp('\\b' + setting.toxic.join('\\b|\\b') + '\\b').test(text.toLowerCase())) {
                client.reply(m.chat, `⚠️ You violated the *Terms & Conditions* of using bots by using blacklisted keywords, as a penalty for your violation being blocked and banned.`, m).then(() => {
                   users.banned = true

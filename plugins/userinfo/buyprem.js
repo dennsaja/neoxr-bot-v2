@@ -26,13 +26,13 @@ exports.run = {
          }, {
             _id: '7D',
             name: 'PREMIUM 7 DAY',
-            price: 700_000_000,
+            price: 1_700_000_000,
             limit: 250,
             duration: 86400000 * 7
          }, {
             _id: '30D',
             name: 'PREMIUM 30 DAY',
-            price: 1_000_000_000,
+            price: 100_000_000_000,
             limit: 1000,
             duration: 86400000 * 30
          }]
