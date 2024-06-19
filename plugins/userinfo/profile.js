@@ -14,7 +14,18 @@ exports.run = {
       if (!text && !m.quoted) return client.reply(m.chat, Func.texted('bold', `🚩 Mention or Reply chat target.`), m)
       if (isNaN(number)) return client.reply(m.chat, Func.texted('bold', `🚩 Invalid number.`), m)
       if (number.length > 15) return client.reply(m.chat, Func.texted('bold', `🚩 Invalid format.`), m)
-      var pic = await Func.fetchBuffer('./media/image/default.jpg')
+      let gender = user.gender;
+      switch (gender) {
+        case 'cowok':
+          gender = 'Laki-laki';
+          break;
+        case 'cewek':
+          gender = 'Perempuan';
+          break;
+        default:
+          gender = 'Tidak diketahui';  // Jika gender tidak dikenal
+      }
+         var pic = await Func.fetchBuffer('./media/image/default.jpg')
       try {
          if (text) {
             var user = number + '@s.whatsapp.net'
