@@ -59,8 +59,8 @@ exports.run = {
          caption += global.footer
          client.sendMessageModify(m.chat, caption, m, {
              largeThumb: true,
-             title: `${Func.censorName2(m.pushName)} ${(user.verified ? ' Terverifikasi' : '')}`,
-             body: `${(user.premium ? '₪ Akun Nitro' : 'Akun Standar')}`,
+             title: `${Func.censorName2(m.pushName)} ${(user.verified ? 'Terverifikasi' : '')}`,
+             body: `${(user.premium ? '⚡ Akun Premium' : 'Akun Standar')}`,
              thumbnail: pic
          })
       }
