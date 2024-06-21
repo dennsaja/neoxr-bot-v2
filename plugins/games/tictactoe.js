@@ -1,4 +1,5 @@
-const TicTacToe = require('../../system/tictactoe')
+const path = require('path')
+const TicTacToe = require(path.resolve(__dirname, '../../../lib/tictactoe'))
 exports.run = {
    usage: ['tictactoe'],
    hidden: ['ttt', 'tttexit'],
