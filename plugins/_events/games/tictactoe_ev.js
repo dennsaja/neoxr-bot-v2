@@ -1,7 +1,8 @@
 exports.run = {
    async: async (m, {
       client,
-      body
+      body,
+      Func
    }) => {
       try {
          let id = m.chat

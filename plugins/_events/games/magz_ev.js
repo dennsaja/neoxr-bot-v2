@@ -3,7 +3,8 @@ exports.run = {
       client,
       body,
       users,
-      prefixes
+      prefixes,
+      Func
    }) => {
       try {
          var reward = Func.randomInt(global.min_reward, global.max_reward)

@@ -76,8 +76,10 @@ client.on('ready', async () => {
                 bot: {
                     users: global.db.users.length,
                     hit: Func.formatNumber(Func.jumlahkanHitStat(global.db.statistic)),
-                    msgr: Func.formatNumber(global.db.setting.messageReceive),
-                    msgs: Func.formatNumber(global.db.setting.messageSent)
+                    msgreceive: Func.formatNumber(global.db.setting.messageReceive),
+                    msgssent: Func.formatNumber(global.db.setting.messageSent),
+                    datareceive: Func.formatNumber(global.db.setting.receiveSize),
+                    dataupload: Func.formatNumber(global.db.setting.uploadSize),
                 },
             };
             res.json(serverInfoo);

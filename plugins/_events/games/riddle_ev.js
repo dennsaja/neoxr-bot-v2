@@ -3,7 +3,8 @@ exports.run = {
       client,
       body,
       users,
-      prefixes
+      prefixes,
+      Func
    }) => {
       try {
          var id = m.chat
