@@ -8,7 +8,7 @@ exports.run = {
    }) => {
       try {
          var reward = Func.randomInt(global.min_reward, global.max_reward)
-         const kbbi = require('../../lib/kbbi')
+         const kbbi = require('../../../../lib/kbbi')
          client.magz = client.magz ? client.magz : {}
          let room = Object.values(client.magz).find(room => room.player.includes(m.sender) && room.id == m.chat && room.playing)
          if (room && body && !prefixes.includes(body.charAt(0))) {
