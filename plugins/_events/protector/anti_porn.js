@@ -31,7 +31,7 @@ exports.run = {
          console.log(e)
       }
    },
-   error: false,
+   error: true,
    cache: true,
    location: __filename
 }

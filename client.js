@@ -1,6 +1,4 @@
 "use strict";
-process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0'
-process.on('uncaughtException', console.error)
 require('events').EventEmitter.defaultMaxListeners = 500
 const PORT = process.env.PORT || 7392
 const { Baileys, MongoDB, PostgreSQL, Scandir } = new (require('@neoxr/wb'))
@@ -61,18 +59,19 @@ client.on('error', async error => {
 client.on('ready', async () => {
     /* auto restart if ram usage is over */
     const ramCheck = setInterval(() => {
-        var ramUsage = process.memoryUsage().rss;
+        const ramUsage = process.memoryUsage().rss;
         if (ramUsage >= require('bytes')(env.ram_limit)) {
             clearInterval(ramCheck);
-            process.send('reset');
+            console.log('Memory usage exceeded. Restarting application...');
+            process.exit(1); // Gracefully exit the process
         }
-    }, 60 * 1000)
+    }, 60000); // 60 detik    
 
     /* server web */
     const runServer = async () => {
         app.set('json spaces', 2);
         app.get("/get-api", async (req, res) => {
-            const serverInfoo = {
+            const serverInfo = {
                 bot: {
                     users: global.db.users.length,
                     hit: Func.formatNumber(Func.jumlahkanHitStat(global.db.statistic)),
@@ -82,7 +81,7 @@ client.on('ready', async () => {
                     dataupload: Func.formatNumber(global.db.setting.uploadSize),
                 },
             };
-            res.json(serverInfoo);
+            res.json(serverInfo);
         });
         app.get('/', (req, res) => res.send('Server Active!'));
         const server = http.createServer(app);
@@ -103,14 +102,14 @@ client.on('ready', async () => {
             const tmpFiles = await fs.promises.readdir('./temp');
             if (tmpFiles.length > 0) {
                 await Promise.all(tmpFiles
-                    .filter(file => !file.endsWith('.file'))
+                    .filter(file => !file.endsWith('.file')) // Filter file penting
                     .map(file => fs.promises.unlink(path.join('./temp', file))));
                 tmpFiles.forEach(file => console.log(`Deleted temp file: ${file}`));
             }
         } catch (err) {
             console.error(`Failed to clean temp directory:`, err);
         }
-    }, 60 * 1000 * 10);
+    }, 600000); // 10 menit
 
     /* save database send http-request every 30 seconds */
     setInterval(async () => {
@@ -178,6 +177,7 @@ client.on('group.add', async ctx => {
     }
 
     const txt = (groupSet && groupSet.text_welcome ? groupSet.text_welcome : text).replace('+tag', `@${ctx.member.split`@`[0]}`).replace('+grup', `${ctx.subject}`);
+    await Func.delay(1500); // Penundaan sebelum mengirim welcome msg
     if (groupSet && groupSet.welcome) sock.sendMessageModify(ctx.jid, txt, null, {
         largeThumb: true,
         thumbnail: pic,
@@ -196,6 +196,7 @@ client.on('group.remove', async ctx => {
        var pic = await Func.fetchBuffer(await sock.profilePictureUrl(ctx.jid, 'image'));
    }
    const txt = (groupSet && groupSet.text_left ? groupSet.text_left : text).replace('+tag', `@${ctx.member.split`@`[0]}`).replace('+grup', `${ctx.subject}`);
+   await Func.delay(1500); // Penundaan sebelum mengirim left msg
    if (groupSet && groupSet.left) sock.sendMessageModify(ctx.jid, txt, null, {
        largeThumb: true,
        thumbnail: pic,
@@ -203,10 +204,16 @@ client.on('group.remove', async ctx => {
    });
 })
 
-client.on('caller', ctx => {
-    if (typeof ctx === 'boolean') return;
-    client.sock.updateBlockStatus(ctx.jid, 'block');
-})
+process.on('uncaughtException', (err) => {
+    console.error('Uncaught Exception:', err);
+    // Misalnya, restart aplikasi atau kirim notifikasi admin
+});
+
+
+//client.on('caller', ctx => {
+//    if (typeof ctx === 'boolean') return;
+//    client.sock.updateBlockStatus(ctx.jid, 'block');
+//})
 
 // client.on('group.promote', ctx => console.log(ctx))
 // client.on('group.demote', ctx => console.log(ctx))
