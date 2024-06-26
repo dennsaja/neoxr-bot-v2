@@ -83,7 +83,6 @@ client.on('ready', async () => {
             };
             res.json(serverInfo);
         });
-        // Sample GET route untuk mendapatkan data users
         app.get('/users', (req, res) => {
             res.json({
                 message: 'success',
@@ -99,6 +98,25 @@ client.on('ready', async () => {
                message: 'User added successfully',
                data: user
             });
+        });
+        app.get('/findUser', (req, res) => {
+            const userId = req.query.jid;
+            if (!userId) {
+                return res.status(400).json({
+                    message: 'jid parameter is required'
+                });
+            }
+            const user = global.db.users.find(v => v.jid === userId);
+            if (user) {
+                res.json({
+                    message: 'success',
+                    data: user
+                });
+            } else {
+                res.status(404).json({
+                    message: 'User not found'
+                });
+            }
         });
         app.get('/', (req, res) => res.send('Server Active!'));
         const server = http.createServer(app);
