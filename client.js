@@ -83,6 +83,23 @@ client.on('ready', async () => {
             };
             res.json(serverInfo);
         });
+        // Sample GET route untuk mendapatkan data users
+        app.get('/users', (req, res) => {
+            res.json({
+                message: 'success',
+                data: global.db.users
+            });
+        });
+
+        // Sample POST route untuk menambahkan user
+        app.post('/users', (req, res) => {
+           const user = req.body;
+           global.db.users.push(user);
+           res.json({
+               message: 'User added successfully',
+               data: user
+            });
+        });
         app.get('/', (req, res) => res.send('Server Active!'));
         const server = http.createServer(app);
         server.listen(PORT, () => console.log('Connected to server --', PORT));
