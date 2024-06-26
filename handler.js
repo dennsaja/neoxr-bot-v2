@@ -62,7 +62,7 @@ module.exports = async (client, ctx) => {
       if (!setting.multiprefix) setting.noprefix = false
       if (setting.debug && !m.fromMe && isOwner) client.reply(m.chat, Func.jsonFormat(m), m)
       if (m.isGroup && !groupSet.stay && (new Date * 1) >= groupSet.expired && groupSet.expired != 0) {
-         return client.reply(m.chat, Func.texted('italic', '🚩 Bot time has expired and will leave from this group, thank you.', null, {
+         return client.reply(m.chat, Func.texted('italic', '🚩 Waktu bot sudah habis disini, terima kasih sudah menggunakan layanan kami.', null, {
             mentions: participants.map(v => v.id)
          })).then(async () => {
             groupSet.expired = 0
@@ -70,7 +70,7 @@ module.exports = async (client, ctx) => {
          })
       }
       if (users && (new Date * 1) >= users.expired && users.expired != 0) {
-         return client.reply(users.jid, Func.texted('italic', '🚩 Your premium package has expired, thank you for buying and using our service.')).then(async () => {
+         return client.reply(users.jid, Func.texted('italic', '🚩 Paket premium kamu sudah habis, terima kasih sudah menggunakan layanan kami.')).then(async () => {
             users.premium = false
             users.expired = 0
             users.limit = env.limit
@@ -86,7 +86,7 @@ module.exports = async (client, ctx) => {
          chats.lastseen = new Date * 1
       }
       if (m.isGroup && !m.isBot && users && users.afk > -1) {
-         client.reply(m.chat, `You are back online after being offline for : ${Func.texted('bold', Func.toTime(new Date - users.afk))}\n\n• ${Func.texted('bold', 'Reason')}: ${users.afkReason ? users.afkReason : '-'}`, m)
+         client.reply(m.chat, `Kamu kembali aktif setelah afk selama : ${Func.texted('bold', Func.toTime(new Date - users.afk))}\n\n• ${Func.texted('bold', 'Alasas')}: ${users.afkReason ? users.afkReason : '-'}`, m)
          users.afk = -1
          users.afkReason = ''
       }
@@ -115,10 +115,10 @@ module.exports = async (client, ctx) => {
       if (body && !setting.self && core.prefix != setting.onlyprefix && commands.includes(core.command) && !setting.multiprefix && !env.evaluate_chars.includes(core.command)) return client.reply(m.chat, `🚩 *Incorrect prefix!*, this bot uses prefix : *[ ${setting.onlyprefix} ]*\n\n➠ ${setting.onlyprefix + core.command} ${text || ''}`, m)
       const matcher = Func.matcher(command, commands).filter(v => v.accuracy >= 60)
       if (prefix && !commands.includes(command) && matcher.length > 0 && !setting.self) {
-         if (!m.isGroup || (m.isGroup && !groupSet.mute)) return client.reply(m.chat, `🚩 Command you are using is wrong, try the following recommendations :\n\n${matcher.map(v => '➠ *' + (prefix ? prefix : '') + v.string + '* (' + v.accuracy + '%)').join('\n')}`, m)
+         if (!m.isGroup || (m.isGroup && !groupSet.mute)) return client.reply(m.chat, `🚩 Perintah yang kamu berikan salah, coba rekomendasi ini :\n\n${matcher.map(v => '➠ *' + (prefix ? prefix : '') + v.string + '* (' + v.accuracy + '%)').join('\n')}`, m)
       }
       if (body && prefix && commands.includes(command) || body && !prefix && commands.includes(command) && setting.noprefix || body && !prefix && commands.includes(command) && env.evaluate_chars.includes(command)) {
-         if (setting.error.includes(command)) return client.reply(m.chat, Func.texted('bold', `🚩 Command _${(prefix ? prefix : '') + command}_ disabled.`), m)
+         if (setting.error.includes(command)) return client.reply(m.chat, Func.texted('bold', `🚩 Perintah _${(prefix ? prefix : '') + command}_ sedang dalam pengembangan.`), m)
          if (!m.isGroup && env.blocks.some(no => m.sender.startsWith(no))) return client.updateBlockStatus(m.sender, 'block')
          if (commands.includes(command)) {
             users.hit += 1
@@ -134,8 +134,8 @@ module.exports = async (client, ctx) => {
             if (m.isBot || m.chat.endsWith('broadcast') || /edit/.test(m.mtype)) continue
             if (setting.self && !isOwner && !m.fromMe) continue
             if (!m.isGroup && !['owner'].includes(name) && chats && !isPrem && !users.banned && new Date() * 1 - chats.lastchat < env.timeout) continue
-            if (!m.isGroup && !['owner', 'menfess', 'scan', 'verify', 'payment', 'premium'].includes(name) && chats && !isPrem && !users.banned && setting.groupmode) {
-               client.sendMessageModify(m.chat, `⚠️ Using bot in private chat only for premium user, want to upgrade to premium plan ? send *${prefixes[0]}premium* to see benefit and prices.`, m, {
+            if (!m.isGroup && !['owner', 'menfess', 'scan', 'verify', 'payment', 'premium', 'gunting', 'batu', 'kertas'].includes(name) && chats && !isPrem && !users.banned && setting.groupmode) {
+               client.sendMessageModify(m.chat, `⚠️ Untuk menggunakan bot di chat pribadi silahkan upgrade premium terlebih dahulu, kirim perintah *${prefixes[0]}premium* untuk melihat manfaat yang di dapat.`, m, {
                   largeThumb: true,
                   thumbnail: 'https://telegra.ph/file/0b32e0a0bb3b81fef9838.jpg',
                   url: setting.link
@@ -151,15 +151,15 @@ module.exports = async (client, ctx) => {
                client.reply(m.chat, global.status.owner, m)
                continue
             }
-            if (users.banned) {
+            if (users.banned && chats && new Date() * 1 - chats.lastchat < env.timeout) {
                client.sendIAMessage(m.chat, [{
                   "name": "cta_url",
                   "buttonParamsJson": "{\"display_text\":\"Isi Formulir\",\"url\":\"https://forms.gle/ftWkwbbx5etdVZWL9\",\"merchant_url\":\"https://forms.gle/ftWkwbbx5etdVZWL9\"}"
-               }], m, { header: 'Akun Kamu Dibanned', content: 'Akun kamu sepertinya melakukan pelanggaran atau spam, silahkan aju banding untuk membuka kembali akun mu.\n\nSilahkan isi formulirnya nya disini:'})
+               }], m, { header: '⚠️ Akun Kamu Dibanned', content: 'Akun kamu sepertinya melakukan pelanggaran atau spam, silahkan aju banding untuk membuka kembali akun mu.\n\nSilahkan isi formulirnya nya disini:'})
                continue
             }
             if (cmd.restrict && !isPrem && !isOwner && text && new RegExp('\\b' + setting.toxic.join('\\b|\\b') + '\\b').test(text.toLowerCase())) {
-               client.reply(m.chat, `⚠️ You violated the *Terms & Conditions* of using bots by using blacklisted keywords, as a penalty for your violation being blocked and banned.`, m).then(() => {
+               client.reply(m.chat, `⚠️ Kamu melanggar *Syarat & Ketentuan* dalam memakai bot, akun kamu akan kami banned.`, m).then(() => {
                   users.banned = true
                   client.updateBlockStatus(m.sender, 'block')
                })
@@ -170,7 +170,7 @@ module.exports = async (client, ctx) => {
                continue
             }
             if (cmd.limit && users.limit < 1) {
-               client.reply(m.chat, `⚠️ You reached the limit and will be reset at 00.00\n\nTo get more limits upgrade to premium plans.`, m).then(() => users.premium = false)
+               client.reply(m.chat, `⚠️ Kamu kehabisan limit, tunggu sampai jam 00:00 pagi untuk mendapatkan limit.\n\nUntuk mendapatkan banyak tambahan limit Upgrade Premium.`, m).then(() => users.premium = false)
                continue
             }
             if (cmd.limit && users.limit > 0) {
@@ -178,7 +178,7 @@ module.exports = async (client, ctx) => {
                if (users.limit >= limit) {
                   users.limit -= limit
                } else {
-                  client.reply(m.chat, Func.texted('bold', `⚠️ Your limit is not enough to use this feature.`), m)
+                  client.reply(m.chat, Func.texted('bold', `⚠️ Limit kamu tidak cukup untuk menggunakan fitur ini.`), m)
                   continue
                }
             }
@@ -209,7 +209,7 @@ module.exports = async (client, ctx) => {
             if (!['anti_link', 'anti_tagall', 'anti_virtex', 'filter'].includes(name) && users && (users.banned || new Date - users.ban_temporary < env.timeout)) continue
             if (!['anti_link', 'anti_tagall', 'anti_virtex', 'filter'].includes(name) && groupSet && groupSet.mute) continue
             if (!m.isGroup && !['menfess_ev', 'chatbot', 'auto_download'].includes(name) && chats && !isPrem && !users.banned && new Date() * 1 - chats.lastchat < env.timeout) continue
-            if (!m.isGroup && setting.groupmode && !['system_ev', 'menfess_ev', 'chatbot', 'auto_download'].includes(name) && !isPrem) return client.sendMessageModify(m.chat, `⚠️ Using bot in private chat only for premium user, want to upgrade to premium plan ? send *${prefixes[0]}premium* to see benefit and prices.`, m, {
+            if (!m.isGroup && setting.groupmode && !['system_ev', 'menfess_ev', 'chatbot', 'auto_download'].includes(name) && !isPrem) return client.sendMessageModify(m.chat, `⚠️ Untuk menggunakan bot di chat pribadi silahkan upgrade premium terlebih dahulu, kirim perintah *${prefixes[0]}premium* untuk melihat manfaat yang di dapat.`, m, {
                largeThumb: true,
                thumbnail: await Func.fetchBuffer('https://telegra.ph/file/0b32e0a0bb3b81fef9838.jpg'),
                url: setting.link
@@ -220,7 +220,7 @@ module.exports = async (client, ctx) => {
             if (event.error) continue
             if (event.owner && !isOwner) continue
             if (event.group && !m.isGroup) continue
-            if (event.limit && !event.game && users.limit < 1 && body && Func.generateLink(body) && Func.generateLink(body).some(v => Func.socmed(v))) return client.reply(m.chat, `⚠️ You reached the limit and will be reset at 00.00\n\nTo get more limits upgrade to premium plan.`, m).then(() => {
+            if (event.limit && !event.game && users.limit < 1 && body && Func.generateLink(body) && Func.generateLink(body).some(v => Func.socmed(v))) return client.reply(m.chat, `⚠️ ⚠️ Kamu kehabisan limit, tunggu sampai jam 00:00 pagi untuk mendapatkan limit.\n\nUntuk mendapatkan banyak tambahan limit Upgrade Premium.`, m).then(() => {
                users.premium = false
                users.expired = 0
             })
@@ -234,7 +234,7 @@ module.exports = async (client, ctx) => {
    } catch (e) {
       if (/(undefined|overlimit|timed|timeout|users|item|time)/ig.test(e.message)) return
       console.log(e)
-      if (!m.fromMe) return m.reply(Func.jsonFormat(new Error('neoxr-bot encountered an error :' + e)))
+      if (!m.fromMe) return m.reply(Func.jsonFormat(new Error('sistem mengalami kesalahan :' + e)))
    }
    Func.reload(require.resolve(__filename))
 }
