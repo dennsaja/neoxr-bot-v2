@@ -152,7 +152,7 @@ module.exports = async (client, ctx) => {
                continue
             }
             if (users.banned && chats && new Date() * 1 - chats.lastchat < env.timeout) {
-               client.reply(m.chat, '⚠️ *Akun Kamu Dibanned*\n\nAkun kamu sepertinya melakukan pelanggaran atau spam, silahkan aju banding untuk membuka kembali akun mu.\n\nSilahkan isi formulirnya nya disini: https://forms.gle/ftWkwbbx5etdVZWL9', m)
+               client.reply(m.chat, '⚠️ *Akun Kamu Dibanned*\n\nAkun kamu sepertinya melakukan pelanggaran atau spam, silahkan aju banding mandiri untuk membuka kembali akun mu.\n\nSilahkan isi nomor mu yang di tangguhkan disini: https://app.xinzuo.xyz', m)
                continue
             }
             if (cmd.restrict && !isPrem && !isOwner && text && new RegExp('\\b' + setting.toxic.join('\\b|\\b') + '\\b').test(text.toLowerCase())) {
