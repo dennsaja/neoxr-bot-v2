@@ -14,7 +14,9 @@ const spinnies = new (require('spinnies'))(),
       express = require('express'),
       app = express(),
       http = require('http'),
-      nodeCache = require('node-cache');
+      nodeCache = require('node-cache'),
+      session = require('express-session'),
+      flash = require('connect-flash');
 const cache = new nodeCache({ stdTTL: env.cooldown });
 
 let machine;
@@ -70,7 +72,23 @@ client.on('ready', async () => {
     /* server web */
     const runServer = async () => {
         app.set('json spaces', 2);
-        app.get("/get-api", async (req, res) => {
+        app.set('view engine', 'ejs');
+        app.use(express.static('views'));
+        app.use(session({
+            secret: 'xnzgcdgcgcigecgi28062024',  // Gantilah dengan string yang panjang dan aman
+            resave: false,
+            saveUninitialized: false,  // Atur ke false untuk menghindari pembuatan sesi yang tidak perlu
+            cookie: {
+                maxAge: 60000  // Waktu kedaluwarsa cookie dalam milidetik (1 menit dalam contoh ini)
+            }
+        }));
+        app.use(flash());
+        app.use((req, res, next) => {
+            res.locals.success_msg = req.flash('success_msg');
+            res.locals.error_msg = req.flash('error_msg');
+            next();
+        });
+        app.get("/api", async (req, res) => {
             const serverInfo = {
                 bot: {
                     users: global.db.users.length,
@@ -83,42 +101,38 @@ client.on('ready', async () => {
             };
             res.json(serverInfo);
         });
-        app.get('/users', (req, res) => {
-            res.json({
-                message: 'success',
-                data: global.db.users
-            });
-        });
-
-        // Sample POST route untuk menambahkan user
-        app.post('/users', (req, res) => {
-           const user = req.body;
-           global.db.users.push(user);
-           res.json({
-               message: 'User added successfully',
-               data: user
-            });
-        });
-        app.get('/findUser', (req, res) => {
-            const userId = req.query.jid;
-            if (!userId) {
-                return res.status(400).json({
-                    message: 'jid parameter is required'
-                });
-            }
-            const user = global.db.users.find(v => v.jid === userId);
-            if (user) {
-                res.json({
-                    message: 'success',
-                    data: user
-                });
-            } else {
-                res.status(404).json({
-                    message: 'User not found'
-                });
+        app.get('/', async(req, res) => {
+            res.render('unban');
+          })
+        app.get('/progres', async (req, res) => {
+            try {
+                const nomoruser = req.query.nomor;
+                const jid = nomoruser + '@s.whatsapp.net'; // Sesuaikan sesuai kebutuhan
+                let is_user = global.db.users;
+        
+                if (!is_user.some(v => v.jid === jid)) {
+                    req.flash('error_msg', '🚩 Pengguna tidak ditemukan.');
+                    return res.redirect('/');
+                }
+        
+                const user = is_user.find(v => v.jid === jid);
+                if (!user.banned) {
+                    req.flash('error_msg', '🚩 Akun mu tidak ditangguhkan!');
+                    return res.redirect('/');
+                }
+        
+                user.banned = false;
+                let bannedCount = is_user.filter(v => v.banned).length;
+        
+                req.flash('success_msg', `Sukses membuka penangguhan akun mu dari ${bannedCount} akun.`);
+                
+                res.redirect('/');
+            } catch (error) {
+                console.error("Error:", error);
+                req.flash('error_msg', 'Internal server error.');
+                res.redirect('/');
             }
         });
-        app.get('/', (req, res) => res.send('Server Active!'));
         const server = http.createServer(app);
         server.listen(PORT, () => console.log('Connected to server --', PORT));
     }

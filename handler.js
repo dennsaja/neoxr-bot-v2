@@ -152,10 +152,7 @@ module.exports = async (client, ctx) => {
                continue
             }
             if (users.banned && chats && new Date() * 1 - chats.lastchat < env.timeout) {
-               client.sendIAMessage(m.chat, [{
-                  "name": "cta_url",
-                  "buttonParamsJson": "{\"display_text\":\"Isi Formulir\",\"url\":\"https://forms.gle/ftWkwbbx5etdVZWL9\",\"merchant_url\":\"https://forms.gle/ftWkwbbx5etdVZWL9\"}"
-               }], m, { header: '⚠️ Akun Kamu Dibanned', content: 'Akun kamu sepertinya melakukan pelanggaran atau spam, silahkan aju banding untuk membuka kembali akun mu.\n\nSilahkan isi formulirnya nya disini:'})
+               client.reply(m.chat, '⚠️ *Akun Kamu Dibanned*\n\nAkun kamu sepertinya melakukan pelanggaran atau spam, silahkan aju banding untuk membuka kembali akun mu.\n\nSilahkan isi formulirnya nya disini: https://forms.gle/ftWkwbbx5etdVZWL9', m)
                continue
             }
             if (cmd.restrict && !isPrem && !isOwner && text && new RegExp('\\b' + setting.toxic.join('\\b|\\b') + '\\b').test(text.toLowerCase())) {

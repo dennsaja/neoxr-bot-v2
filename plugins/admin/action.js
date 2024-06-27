@@ -35,6 +35,7 @@ exports.run = {
          client.groupParticipantsUpdate(m.chat, [jid], 'promote').then(res => m.reply(Func.jsonFormat(res)))
       }
    },
+   error: true,
    group: true,
    admin: true,
    botAdmin: true
