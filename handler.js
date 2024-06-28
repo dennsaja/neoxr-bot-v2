@@ -151,7 +151,7 @@ module.exports = async (client, ctx) => {
                client.reply(m.chat, global.status.owner, m)
                continue
             }
-            if (users.banned && chats && new Date() * 1 - chats.lastchat < env.timeout) {
+            if (users.banned) {
                client.reply(m.chat, '⚠️ *Akun Kamu Dibanned*\n\nAkun kamu sepertinya melakukan pelanggaran atau spam, silahkan aju banding mandiri untuk membuka kembali akun mu.\n\nSilahkan isi nomor mu yang di tangguhkan disini: https://app.xinzuo.xyz', m)
                continue
             }
