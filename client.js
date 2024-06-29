@@ -97,8 +97,8 @@ client.on('ready', async () => {
                     hit: Func.formatNumber(Func.jumlahkanHitStat(global.db.statistic)),
                     msgreceive: Func.formatNumber(global.db.setting.messageReceive),
                     msgssent: Func.formatNumber(global.db.setting.messageSent),
-                    datareceive: Func.formatNumber(global.db.setting.receiveSize),
-                    dataupload: Func.formatNumber(global.db.setting.uploadSize),
+                    datareceive: Func.formatSize(global.db.setting.receiveSize),
+                    dataupload: Func.formatSize(global.db.setting.uploadSize),
                 },
             };
             res.json(serverInfo);
