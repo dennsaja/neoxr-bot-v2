@@ -79,15 +79,6 @@ client.on('ready', async () => {
         app.use(helmet());
         app.use(
             helmet({
-              contentSecurityPolicy: {
-                useDefaults: true,
-                directives: {
-                  defaultSrc: ["'self'"],
-                  imgSrc: ["'self'", 'https://xinzuo.xyz'],
-                  scriptSrc: ["'self'", "https://kit.fontawesome.com"],
-                  styleSrc: ["'self'", "https://fonts.googleapis.co"],
-                },
-              },
               hsts: {
                 maxAge: 31536000,
                 includeSubDomains: true,
