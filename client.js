@@ -75,21 +75,7 @@ client.on('ready', async () => {
     const runServer = async () => {
         app.set('json spaces', 2);
         app.set('view engine', 'ejs');
-        app.use(express.static('views'));
-        app.use(helmet());
-        app.use(
-            helmet({
-              hsts: {
-                maxAge: 31536000,
-                includeSubDomains: true,
-              },
-              frameguard: {
-                action: 'deny',
-              },
-              xssFilter: true,
-              noSniff: true,
-            })
-          );        
+        app.use(express.static('views'));    
         app.use(session({
             secret: 'xnzgcdgcgcigecgi28062024',  // Gantilah dengan string yang panjang dan aman
             resave: false,
