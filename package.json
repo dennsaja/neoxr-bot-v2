@@ -37,6 +37,7 @@
       "ejs": "^3.1.10",
       "express": "~4.16.4",
       "express-session": "^1.18.0",
+      "helmet": "latest",
       "jimp": "~0.16.13",
       "json-stable-stringify": "^1.0.2",
       "node-cron": "^3.0.0",

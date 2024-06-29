@@ -16,7 +16,9 @@ const spinnies = new (require('spinnies'))(),
       http = require('http'),
       nodeCache = require('node-cache'),
       session = require('express-session'),
-      flash = require('connect-flash');
+      flash = require('connect-flash'),
+      helmet = require('helmet');
+
 const cache = new nodeCache({ stdTTL: env.cooldown });
 
 let machine;
@@ -74,6 +76,14 @@ client.on('ready', async () => {
         app.set('json spaces', 2);
         app.set('view engine', 'ejs');
         app.use(express.static('views'));
+        app.use(helmet());
+        app.use(
+          helmet.frameguard({
+            action: 'deny', // Menolak semua iframe
+          })
+        );
+        app.use(helmet.xssFilter());
+        app.use(helmet.noSniff());          
         app.use(session({
             secret: 'xnzgcdgcgcigecgi28062024',  // Gantilah dengan string yang panjang dan aman
             resave: false,
