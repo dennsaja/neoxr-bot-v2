@@ -78,12 +78,26 @@ client.on('ready', async () => {
         app.use(express.static('views'));
         app.use(helmet());
         app.use(
-          helmet.frameguard({
-            action: 'deny', // Menolak semua iframe
-          })
-        );
-        app.use(helmet.xssFilter());
-        app.use(helmet.noSniff());          
+            helmet({
+              contentSecurityPolicy: {
+                useDefaults: true,
+                directives: {
+                  defaultSrc: ["'self'"],
+                  scriptSrc: ["'self'", "xinzuo.xyz"],
+                  styleSrc: ["'self'", "xinzuo.xyz"],
+                },
+              },
+              hsts: {
+                maxAge: 31536000,
+                includeSubDomains: true,
+              },
+              frameguard: {
+                action: 'deny',
+              },
+              xssFilter: true,
+              noSniff: true,
+            })
+          );        
         app.use(session({
             secret: 'xnzgcdgcgcigecgi28062024',  // Gantilah dengan string yang panjang dan aman
             resave: false,
