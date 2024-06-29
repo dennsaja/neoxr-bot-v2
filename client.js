@@ -84,8 +84,8 @@ client.on('ready', async () => {
                 directives: {
                   defaultSrc: ["'self'"],
                   imgSrc: ["'self'", 'https://xinzuo.xyz'],
-                  scriptSrc: ["'self'", "xinzuo.xyz"],
-                  styleSrc: ["'self'", "xinzuo.xyz"],
+                  scriptSrc: ["'self'", "https://kit.fontawesome.com"],
+                  styleSrc: ["'self'", "https://fonts.googleapis.co"],
                 },
               },
               hsts: {
