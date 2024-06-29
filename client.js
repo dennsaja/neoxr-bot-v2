@@ -83,6 +83,7 @@ client.on('ready', async () => {
                 useDefaults: true,
                 directives: {
                   defaultSrc: ["'self'"],
+                  imgSrc: ["'self'", 'https://xinzuo.xyz'],
                   scriptSrc: ["'self'", "xinzuo.xyz"],
                   styleSrc: ["'self'", "xinzuo.xyz"],
                 },
