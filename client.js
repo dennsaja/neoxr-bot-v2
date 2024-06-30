@@ -16,8 +16,7 @@ const spinnies = new (require('spinnies'))(),
       http = require('http'),
       nodeCache = require('node-cache'),
       session = require('express-session'),
-      flash = require('connect-flash'),
-      helmet = require('helmet');
+      flash = require('connect-flash');
 
 const cache = new nodeCache({ stdTTL: env.cooldown });
 
