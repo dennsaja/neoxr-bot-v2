@@ -66,7 +66,7 @@ client.on('ready', async () => {
         }
     }, 60000);
 
-    const runServer = async () => {
+    /*const runServer = async () => {
         app.set('json spaces', 2);
         app.set('view engine', 'ejs');
         app.use(express.static('views'));
@@ -137,7 +137,7 @@ client.on('ready', async () => {
         server.listen(PORT, () => console.log('Connected to server --', PORT));
     };
 
-    runServer();
+    runServer();*/
 
     if (!fs.existsSync('./temp')) fs.mkdirSync('./temp');
 
