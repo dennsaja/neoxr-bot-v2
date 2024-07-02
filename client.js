@@ -21,8 +21,7 @@ const cache = new nodeCache({ stdTTL: env.cooldown });
 let machine;
 if (process.env.DATABASE_URL) {
     if (/mongo/.test(process.env.DATABASE_URL)) {
-        MongoDB.db = env.database;
-        machine = MongoDB;
+        machine = new (require('./lib/system/mongo'));
     } else if (/postgres/.test(process.env.DATABASE_URL)) {
         machine = PostgreSQL;
     }
